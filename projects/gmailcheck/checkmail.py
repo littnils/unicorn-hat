@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import imaplib
 
@@ -22,10 +22,13 @@ width, height = unicorn.get_shape()
 MAIL_REFRESH_INTERVAL = 10
 BLINK_REFRESH_INTERVAL = 0.1
 
+SMTP_SERVER = ""
+FROM_EMAIL = ""
+FROM_PWD = ""
 
 def read_email_from_gmail():
-    mail = imaplib.IMAP4_SSL(getenv('SMTP_SERVER'))
-    mail.login(getenv('FROM_EMAIL'), getenv('FROM_PWD'))
+    mail = imaplib.IMAP4_SSL(SMTP_SERVER)
+    mail.login(FROM_EMAIL, FROM_PWD)
     mail.select('inbox')
     unread_mails = len(mail.search(None, 'UnSeen')[1][0].split())
     return unread_mails
@@ -47,9 +50,11 @@ def random_blinks(blink_amount):
             for x in range(width):
                 unicorn.set_pixel(x, y, r, g, b)
                 unicorn.show()
+    clean_screen()
 
 
 if __name__ == "__main__":
+    print(getenv('SMTP_SERVER'))
     while True:
         unreadMails = read_email_from_gmail()
         now = int(time.time())
